@@ -2,7 +2,7 @@ import argparse
 import torch
 from transformers import BertConfig, BertForPreTraining, load_tf_weights_in_bert, BertModel, BertTokenizer
 import logging
-
+import shutil
 
 logger = logging.getLogger('convert_tf_torch')
 
@@ -30,6 +30,9 @@ if __name__ == "__main__":
     bert_config_file = './chinese_wonezha_L-12_H-768_A-12/bert_config.json'  # tf模型配置
     pytorch_dump_path = './wonezha_bert/pytorch_model.bin'  # 转换后的模型文件，配置文件和词典和tf的一致
     convert_tf_checkpoint_to_pytorch(tf_checkpoint_path, bert_config_file, pytorch_dump_path)
+    # 复制配置文件和词典
+    shutil.copy('./chinese_wonezha_L-12_H-768_A-12/bert_config.json','./wonezha_bert/config.json')
+    shutil.copy('./chinese_wonezha_L-12_H-768_A-12/vocab.txt','./wonezha_bert/vocab.txt')
     # 测试转换后的模型
     model = BertModel.from_pretrained('./wonezha_bert/')
     logger.info('loading bert model')
