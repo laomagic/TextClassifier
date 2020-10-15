@@ -21,12 +21,12 @@ class BertDataset(Dataset):
         # self.data["sentence"] = self.data['title'] + self.data['content']
         self.data["sentence"] = self.data['content']
         self.data['clean_sentence'] = self.data['sentence'].progress_apply(clean_symbols)
-        self.data["cut_sentence"] = self.data['clean_sentence'].progress_apply(query_cut)
+        self.data["cut_sentence"] = self.data['clean_sentence']
         # 标签映射到id
         self.data['category_id'] = self.data['label'].progress_apply(lambda x: x.strip()).map(config.label2id)
         # char粒度
-        if not self.word:
-            self.data['cut_sentence'] = self.data['cut_sentence'].progress_apply(lambda x: ' '.join(''.join(x)))
+        if self.word:
+            self.data["cut_sentence"] = self.data['clean_sentence'].progress_apply(query_cut)
         self.tokenizer = tokenizer
         self.max_length = max_length
 
