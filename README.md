@@ -6,7 +6,7 @@ wobert/**wonezha**:以词为单位的中文 bert 模型，具体详情见：[htt
 
 google/Roberta：以字为粒度的中文 bert，Roberta 的模型地址：[https://github.com/ymcui/Chinese-BERT-wwm](https://github.com/ymcui/Chinese-BERT-wwm)，roberta 的模型为：`RoBERTa-wwm-ext, Chinese`
 
-google 中文 bert 的地址：[https://github.com/google-research/bert](https://github.com/google-research/bert)，goole 的为中文的 bert 模型
+google 中文 bert 的地址：[https://github.com/google-research/bert](https://github.com/google-research/bert)，google 的为中文的 bert 模型
 
 # 2.bert模型的在数据集上测试
 
@@ -22,12 +22,14 @@ eps = 1e-8
 learning_rate = 2e-5  # 学习率
 ```
 **1）语料为词粒度版本，参数：word=True（**语料使用jieba分词工具进行分词**）**
-|    |total_batch|train acc<br>%|train loss|val acc<br>%|val loss|test acc<br>%|test loss|
-|:----:|:----|:----:|:----|:----:|:----|:----:|:----|:----:|:----|:----:|:----|:----:|:----|:----:|:----|
-|roberta|14000|79.69|0.66|78.02|0.69|78.27|0.69|
-|**wonezha**|15000|93.75|0.24|92.04|0.26|92.24|0.25|
-|wobert|10000|96.88|0.13|93.79|0.2|93.83|0.2|
-|google|14000|75.00|0.69|77.19|0.72|77.39|0.72|
+```plain
+         acc     loss
+roberta  78.27   0.69
+wonezha  92.24   0.25
+wobert   93.83   0.2
+google   77.39   0.72
+```
+(其中google指的goole版本的中文bert-base,如1介绍的bert对应的基础版本)
 
 **2）语料为字粒度版本，参数：word=False**
 
