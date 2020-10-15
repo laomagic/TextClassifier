@@ -136,6 +136,20 @@ def convert_distll_data(data, label_path, save_path):
     print('文件：{}保存成功'.format(save_path))
 
 
+def modify_distill_dataset(path,save_path):
+    """筛选distilll的数据"""
+    raw_data = open(path, 'r').readlines()
+    data = []
+    for line in raw_data:
+        row = line.strip('\n').split("\t")
+        if len(row) != 2:
+            continue
+        data.append(row)
+    with open(save_path,'w',encoding='utf-8') as obj:
+        for line in data:
+            obj.write('\t'.join(line)+'\n')
+
+
 if __name__ == '__main__':
     root_path = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
     category_path = root_path + '/data/THUCNews/'
@@ -169,3 +183,7 @@ if __name__ == '__main__':
     convert_distll_data(train_data, label_path, train_distill_path)
     convert_distll_data(test_data, label_path, test_distill_path)
     convert_distll_data(dev_data, label_path, dev_distill_path)
+    # 筛选数据
+    modify_distill_dataset(train_distill_path,root_path+'/data/train_distill_new.tsv')
+    modify_distill_dataset(test_distill_path,root_path+'/data/test_distill_new.tsv')
+    modify_distill_dataset(dev_distill_path,root_path+'/data/dev_distill_new.tsv')
