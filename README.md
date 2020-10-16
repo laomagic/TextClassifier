@@ -51,18 +51,20 @@ google   77.39   0.72
 运行prepare_distill_dataset.py 生成蒸馏数据train_distill_new.tsv test_distill_new.tsv dev_distill_new.tsv
 2.下载预训练的bert模型 放到model目录下
 3.修改utils/config.py配置文件的模型路径等参数，运行train.py文件进行文本分类任务
-模型的蒸馏，可以参考FastBert提供的代码：
-主要步骤：
-    1). 初始训练:进行文本分类的微调训练
-    sh run_scripts/script_train_stage0.sh
-    2). 蒸馏训练:transformer每层的student classifier学习teacher classifier的分布
-    sh run_scripts/script_train_stage1.sh
-    **注意**:蒸馏阶段输入数据为无监督数据，可依据需要引入更多数据提升鲁棒性
-    3). 推理:调节speed，观察推理速度和准确率之间的关系
-    sh run_scripts/script_infer.sh
-    其中 inference_speed参数(0.0~1.0)控制加速程度
-    4). 部署使用
-    python3 predict.py
+
 ```
 
+```python
+模型的蒸馏，可以参考FastBert提供的代码,主要步骤：
+1. 初始训练:进行文本分类的微调训练
+sh run_scripts/script_train_stage0.sh
+2. 蒸馏训练:transformer每层的student classifier学习teacher classifier的分布
+sh run_scripts/script_train_stage1.sh
+**注意**:蒸馏阶段输入数据为无监督数据，可依据需要引入更多数据提升鲁棒性
+3. 推理:调节speed，观察推理速度和准确率之间的关系
+sh run_scripts/script_infer.sh
+其中 inference_speed参数(0.0~1.0)控制加速程度
+4. 部署使用
+python3 predict.py
+```
 
