@@ -8,6 +8,8 @@ google/Roberta：以字为粒度的中文 bert，Roberta 的模型地址：[http
 
 google 中文 bert 的地址：[https://github.com/google-research/bert](https://github.com/google-research/bert)，google 的为中文的 bert 模型
 
+其中，四种版本的bert链接内部均有较详细的介绍。
+
 ## 2.bert模型的在数据集上测试
 
 在THUCNews数据集上进行文本的分类任务，bert在数据集上微调过程中每 1000batch，在测试集上验证一次，待验证的loss损失在5batch内不在下降，停止训练。
@@ -30,8 +32,8 @@ wonezha  92.24   0.25
 wobert   93.83   0.2
 google   77.39   0.72
 ```
-(其中google指的goole版本的中文bert-base,如1介绍的bert对应的基础版本)
-
+(其中google指的goole版本的中文bert-base,如1介绍的bert对应的基础版本,本次测试的bert版本链接，百度网盘：链接：https://pan.baidu.com/s/10kX5kC20ggJo7ztz4h3rLA ；提取码：vnxk )
+从测试的结果中可以看出，wobert/wonezha（词粒度版本）的bert在THUCNews文本分类的任务上的表现要远好于google/roberta（字粒度版本）,而wobert的acc比wonezha也要高1.59%。
 
 **2）语料为字粒度版本，参数：word=False**
 
@@ -39,4 +41,28 @@ google   77.39   0.72
 # **3.FastBert蒸馏后的效果**
 
 **FastBert的论文地址：**[https://arxiv.org/pdf/2004.02178.pdf](https://arxiv.org/pdf/2004.02178.pdf)，代码地址：[https://github.com/BitVoyage/FastBERT](https://github.com/BitVoyage/FastBERT)
+
+
+## 4.代码的使用步骤
+
+```python
+1.到数据集的地址下载原始数据进行解压，放到data目录下
+运行prepare_dataset.py data文件下生成训练数据train.csv test.csv valid.csv 以及标签到id的映射文件label2id.json
+运行prepare_distill_dataset.py 生成蒸馏数据train_distill_new.tsv test_distill_new.tsv dev_distill_new.tsv
+2.下载预训练的bert模型 放到model目录下
+3.修改utils/config.py配置文件的模型路径等参数，运行train.py文件进行文本分类任务
+模型的蒸馏，可以参考FastBert提供的代码：
+主要步骤：
+    1). 初始训练:进行文本分类的微调训练
+    sh run_scripts/script_train_stage0.sh
+    2). 蒸馏训练:transformer每层的student classifier学习teacher classifier的分布
+    sh run_scripts/script_train_stage1.sh
+    **注意**:蒸馏阶段输入数据为无监督数据，可依据需要引入更多数据提升鲁棒性
+    3). 推理:调节speed，观察推理速度和准确率之间的关系
+    sh run_scripts/script_infer.sh
+    其中 inference_speed参数(0.0~1.0)控制加速程度
+    4). 部署使用
+    python3 predict.py
+```
+
 
