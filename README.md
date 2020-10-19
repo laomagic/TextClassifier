@@ -88,11 +88,13 @@ speed_arg:0.8, time_per_record:0.0176, acc:0.9100,   2.07倍
 与2同样的数据集上，使用git提供的代码，修改数据预处理文件，然后进行蒸馏，蒸馏时使用的模型为wobert版本的bert，对语料使用结巴进行了分词，结果如下：
 
 ```plain
-speed 0    time 0.0380  acc 0.9441  基准
-speed 0.5  time 0.0364  acc 0.9441  1.04
-speed 0.8  time 0.0338  acc 0.9438  1.12
-speed 0.9  time 0.0137  acc 0.9406  2.77
-speed 1    time 0.0062  acc 0.8974  6.13
+speed 0     time 0.0380  acc 0.9441  基准
+speed 0.5   time 0.0364  acc 0.9441  1.04
+speed 0.8   time 0.0338  acc 0.9438  1.12
+speed 0.85  time 0.0267  acc 0.9432  1.42
+speed 0.9   time 0.0137  acc 0.9406  2.77
+speed 0.95  time 0.0080 acc 0.9229   4.75
+speed 1     time 0.0062  acc 0.8974  6.13
 ```
 未蒸馏的分类效果：acc:0.9466   loss:0.2970
 
