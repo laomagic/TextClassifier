@@ -85,17 +85,15 @@ speed_arg:0.8, time_per_record:0.0176, acc:0.9100,   2.07倍
 ```
 推理的acc指标和git提供的结果基本一致，但是推理速度，并没有作者测试的那么好。
 
-同样的数据集上，使用git提供的代码，修改数据预处理文件，然后进行蒸馏，结果如下：
-蒸馏时使用的模型为wobert版本的bert
-```plain
-speed 0    time 0.0375  acc 0.9448  基准
-speed 0.1  time 0.0359  acc 0.9448
-speed 0.5  time 0.0366  acc 0.9446
-speed 0.7  time 0.0361  acc 0.9448
-speed 0.8  time 0.0335  acc 0.9446
-speed 0.9  time 0.0138  acc 0.9427   2.7
-speed 1    time 0.0062  acc 0.8967   5.64
-```
-未蒸馏的分类效果：acc:0.9466  loss:0.2970
+与2同样的数据集上，使用git提供的代码，修改数据预处理文件，然后进行蒸馏，蒸馏时使用的模型为wobert版本的bert，对语料使用结巴进行了分词，结果如下：
 
-蒸馏后的
+```plain
+speed 0    time 0.0380  acc 0.9441  基准
+speed 0.5  time 0.0364  acc 0.9441  1.04
+speed 0.8  time 0.0338  acc 0.9438  1.12
+speed 0.9  time 0.0137  acc 0.9406  2.77
+speed 1    time 0.0062  acc 0.8974  6.13
+```
+未蒸馏的分类效果：acc:0.9466   loss:0.2970
+
+未蒸馏的模型和蒸馏后的模型(speed=0)，acc相差0.0025；蒸馏后的模型，speed为0.5时，acc保持不变，而speed为0.9时，acc下降0.006,推理速度提升2.77倍，speed为1时，acc下降0.0467，推理速度提升6.14倍；表明FastBert蒸馏能保证较低精度损失的同时，一定程度能够提升模型的推理速度。
