@@ -44,14 +44,14 @@ wonezha  70.33   0.94
 wobert   73.29   0.83
 google   54.09   1.4
 ```
-未使用分词工具对语料进行分词,bert默认使用的wordpiece的工具处理文本，字粒度的文本方式改变了词汇之间的相关联系，文本分类的效果总体较差，而且词粒度版本的bert比字粒度的bert的acc高16~19%，说明词粒度版本的词中一定程度上包含了char的语义信息。
+未使用分词工具对语料进行分词，bert默认使用的wordpiece的工具处理文本，字粒度的文本方式改变了词汇之间的相关联系，文本分类的效果总体较差，而且词粒度版本的bert比字粒度的bert的acc高16~19%，说明词粒度版本的词中一定程度上包含了char的语义信息。
 
-# **3.FastBert蒸馏后的效果**
+## **3.FastBert蒸馏后的效果**
 
 **FastBert的论文地址：**[https://arxiv.org/pdf/2004.02178.pdf](https://arxiv.org/pdf/2004.02178.pdf)，代码地址：[https://github.com/BitVoyage/FastBERT](https://github.com/BitVoyage/FastBERT)
 
 
-## 4.代码的使用步骤
+### 3.1代码的使用步骤
 
 ```python
 1.到数据集的地址下载原始数据进行解压，放到data目录下
@@ -75,4 +75,27 @@ sh run_scripts/script_infer.sh
 4. 部署使用
 python3 predict.py
 ```
+### 3.2蒸馏的效果
+git提供的数据集上的复现效果，使用作者提供的bert模型：
+```plain
+speed_arg:0.0, time_per_record:0.0365, acc:0.9392,   基准
+speed_arg:0.1, time_per_record:0.0332, acc:0.9400,   1.10倍
+speed_arg:0.5, time_per_record:0.0237, acc:0.9333,   1.54倍
+speed_arg:0.8, time_per_record:0.0176, acc:0.9100,   2.07倍
+```
+推理的acc指标和git提供的结果基本一致，但是推理速度，并没有作者测试的那么好。
 
+同样的数据集上，使用git提供的代码，修改数据预处理文件，然后进行蒸馏，结果如下：
+蒸馏时使用的模型为wobert版本的bert
+```plain
+speed 0    time 0.0375  acc 0.9448  基准
+speed 0.1  time 0.0359  acc 0.9448
+speed 0.5  time 0.0366  acc 0.9446
+speed 0.7  time 0.0361  acc 0.9448
+speed 0.8  time 0.0335  acc 0.9446
+speed 0.9  time 0.0138  acc 0.9427   2.7
+speed 1    time 0.0062  acc 0.8967   5.64
+```
+未蒸馏的分类效果：acc:0.9466  loss:0.2970
+
+蒸馏后的
