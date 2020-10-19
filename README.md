@@ -37,7 +37,7 @@ google   77.39   0.72
 
 **2）语料为字粒度版本，参数：word=False**
 
-``plain
+```plain
          acc     loss
 roberta  54.01   1.4
 wonezha  70.33   0.94
