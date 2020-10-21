@@ -85,7 +85,7 @@ speed_arg:0.8, time_per_record:0.0176, acc:0.9100,   2.07倍
 ```
 推理的acc指标和git提供的结果基本一致，但是推理速度，并没有作者测试的那么好。
 
-与2同样的数据集上，使用git提供的代码，修改数据预处理文件，然后进行蒸馏，蒸馏时使用的模型为wobert版本的bert，对语料使用结巴进行了分词，结果如下：
+与2同样的数据集上，使用git提供的代码，测试代码链接：[https://github.com/laomagic/TextFastBert](https://github.com/laomagic/TextFastBert)，其中修改数据预处理文件，对train.py添加早停功能，然后进行蒸馏，蒸馏时使用的模型为wobert版本的bert，对语料使用结巴进行了分词，结果如下：
 
 ```plain
 speed 0     time 0.0380  acc 0.9441  基准
