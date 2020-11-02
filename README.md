@@ -10,6 +10,8 @@ google 中文 bert 的地址：[https://github.com/google-research/bert](https:/
 
 其中，四种版本的bert链接内部均有较详细的介绍。
 
+albert是在bert基础上进行参数缩减的版本，[https://github.com/brightmart/albert_zh](https://github.com/brightmart/albert_zh) (tiny:albert_chinese_tiny  base:albert_chinese_base  large:albert_chinese_large)
+
 ## 2.bert模型的在数据集上测试
 
 在THUCNews数据集上进行文本的分类任务，bert在数据集上微调过程中每 1000batch，在测试集上验证一次，待验证的loss损失在5batch内不在下降，停止训练。
@@ -31,6 +33,9 @@ roberta  78.27   0.69
 wonezha  92.24   0.25
 wobert   93.83   0.2
 google   77.39   0.72
+tiny     73.83   0.82
+base     75      0.79
+large    76.35   0.74
 ```
 (其中google指的goole版本的中文bert-base,如1介绍的bert对应的基础版本,本次测试的bert版本链接，百度网盘：链接：https://pan.baidu.com/s/10kX5kC20ggJo7ztz4h3rLA ；提取码：vnxk )
 从测试的结果中可以看出，wobert/wonezha（词粒度版本）的bert在THUCNews文本分类的任务上的表现要远好于google/roberta（字粒度版本）,而wobert的acc比wonezha也要高1.59%。
