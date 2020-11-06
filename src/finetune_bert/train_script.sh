@@ -1,0 +1,11 @@
+python run_language_model_bert.py \
+     --output_dir="output" \
+     --model_type="bert" \
+     --model_name_or_path="./english_bert" \
+     --do_train \
+     --train_data_file="wiki_train.txt" \
+     --do_eval \
+     --eval_data_file="wiki_eval.txt" \
+     --mlm \
+     --line_by_line \
+     --per_device_train_batch_size=8
