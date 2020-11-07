@@ -1,0 +1,15 @@
+{
+    "vocab_file" : "./pretrained_model/public/vocab.txt",
+    "bert_config_path" : "./pretrained_model/public/config.json",
+    "bert_pretrained_model_path" : "./pretrained_model/public/pytorch_model.bin",
+
+    "num_class":119,
+    "cls_hidden_size": 128,
+    "cls_num_attention_heads": 8,
+    "max_seq_len" : 128,
+    
+    "num_tuning_layers" : 12,
+    "init_lr" : 2e-5,
+    "gradient_accumulation_steps" : 1,
+    "warmup_proportion" : 0.1
+}
