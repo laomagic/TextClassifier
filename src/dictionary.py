@@ -1,13 +1,23 @@
 import jieba
 import os
-
+import re
 jieba.initialize()
 from string import punctuation
-from .utils import clean_symbols
 from collections import Counter
 from tqdm import tqdm
 import joblib
 
+
+def clean_symbols(text):
+    """
+    对特殊符号做一些处理
+    """
+    text = re.sub('[0-9]+', " NUM ", str(text))
+    text = re.sub('[!！]+', " ", text)
+    #     text = re.sub('!', '', text)
+    text = re.sub('[?？]+', " ", text)
+    text = re.sub("[a-zA-Z#$%&\'()*+,-./:;：<=>@，。★、…【】《》“”‘’'!'[\\]^_`{|}~]+", " OOV ", text)
+    return re.sub("\s+", " ", text)
 
 class Dictionary:
     """构建字典"""
