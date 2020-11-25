@@ -114,12 +114,15 @@ def processes_data(data,word):
     self.data["sentence"] = self.data['title'] + self.data['content']
     # data["sentence"] = data['content']
     data['clean_sentence'] = data['sentence'].progress_apply(clean_symbols)
-    data["cut_sentence"] = data['clean_sentence']
+    data["cut_sentence"] = data['clean_sentence'].progress_apply(' '.join(query_cut))
+    
+    
     # 标签映射到id
     data['category_id'] = data['label'].progress_apply(lambda x: x.strip()).map(config.label2id)
     # char粒度
-    if word:
-        data["cut_sentence"] = data['clean_sentence'].progress_apply(query_cut)
+    if not word:
+        data['raw_words'] = data["cut_sentence"].apply(lambda x: " ".join(list("".join(x.split(' ')))))
+        
     return data
 
 
