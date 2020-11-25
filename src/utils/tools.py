@@ -122,6 +122,37 @@ def build_dict_dataset():
     return data
 
 
+def multiprocess_data(data, func, worker=None, word=None):
+    """多进程处理数据"""
+    cpu_count = multiprocessing.cpu_count() // 2  # cpu核心数
+    if worker == -1 or worker > cpu_count:
+        worker = cpu_count
+    print('used cpu:' + format(worker))
+    length = len(data)
+    chunk_size = length // worker  # 切分数据
+    start = 0
+    end = 0
+    pool = multiprocessing.Pool(processes=worker)
+    result = []
+    start_time = time.time()
+    while end < length:
+        end = start + chunk_size
+        if end > length:
+            end = length
+        res = pool.apply_async(func, (data[start:end], word))
+        start = end
+        result.append(res)
+    pool.close()  # 关闭进程池
+    pool.join()   # 主进程等待进程结束
+    end_time = time.time()
+    print('multiprocess time: %.4f seconds.' % (end_time - start_time))
+
+    # result = np.concatenate([i.get() for i in result], axis=0)
+    total_data = pd.concat([i.get() for i in result], axis=0)  # 合并数据
+    return total_data
+
+
+
 if __name__ == '__main__':
     # str1 = '我的世界充3满奸诈，dfs ,的 各种,111, 222,放手'
     # st = clean_str(str1)
