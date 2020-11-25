@@ -33,10 +33,8 @@ class BertDataset(Dataset):
 
     def __getitem__(self, i):
         data = self.data.iloc[i]
-        text = data['cut_sentence']  # text数据
+        text = data['cut_sentence'].split(' ')  # text数据
         labels = int(data['category_id'])
-        if not self.word:
-            text = text.split(' ')
         text_dict = self.tokenizer.encode_plus(
             text,
             add_special_token=True,
