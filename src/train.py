@@ -16,6 +16,7 @@ from transformers import (WEIGHTS_NAME, AdamW, BertConfig,
                           RobertaTokenizer,
                           XLNetConfig, XLNetForSequenceClassification,
                           XLNetTokenizer, get_linear_schedule_with_warmup)
+from tensorboardX import SummaryWriter
 
 parse = argparse.ArgumentParser(description='文本分类')
 parse.add_argument('--model', type=str, default='BERT', help='选择模型: CNN, RNN, RCNN, RNN_Att, DPCNN, Transformer')
@@ -52,6 +53,7 @@ def train(config, model, train_iter, dev_iter, test_iter, model_name):
     dev_best_loss = float('inf')
     last_improve = 0  # 记录上次验证集loss下降的batch数
     flag = False  # 记录是否很久没有效果提升
+    writer = SummaryWriter(log_dir=config.log_path + '/' + time.strftime('%m-%d_%H.%M', time.localtime()))
     for epoch in range(config.num_epochs):
         print('Epoch [{}/{}]'.format(epoch + 1, config.num_epochs))
         # scheduler.step() # 学习率衰减
@@ -84,6 +86,10 @@ def train(config, model, train_iter, dev_iter, test_iter, model_name):
                 print(
                     msg.format(total_batch, loss.item(), train_acc, dev_loss,
                                dev_acc, time_dif, improve))
+                writer.add_scalar("loss/train", loss.item(), total_batch)
+                writer.add_scalar("loss/dev", dev_loss, total_batch)
+                writer.add_scalar("acc/train", train_acc, total_batch)
+                writer.add_scalar("acc/dev", dev_acc, total_batch)
                 model.train()
             total_batch += 1
             if total_batch - last_improve > config.require_improvement:
@@ -93,6 +99,7 @@ def train(config, model, train_iter, dev_iter, test_iter, model_name):
                 break
         if flag:
             break
+    writer.close()
     test(config, model, test_iter)
 
 
