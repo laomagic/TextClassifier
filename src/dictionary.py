@@ -6,6 +6,8 @@ from string import punctuation
 from collections import Counter
 from tqdm import tqdm
 import joblib
+import pandas as pd
+from src.tools import processes_data, multiprocess_data
 
 
 def clean_symbols(text):
@@ -38,7 +40,7 @@ class Dictionary:
         if self.start_end_tokens:
             vocab_words += ['<SOS>', '<EOS>']
             vocab_size += 2
-        data = [word for sen in tqdm(data) for word in jieba.lcut(clean_symbols(sen))]
+        data = [word for sen in tqdm(data) for word in sen.split(' ')]
         word2count = Counter(data)
         # 词典的容量
         if self.max_size:
@@ -62,15 +64,20 @@ class Dictionary:
 
 
 if __name__ == '__main__':
-    # path = '../data/thucnews/'
-    # test = [text.strip().split('\t')[1] for text in open(path + 'test.tsv').readlines()]
-    # train = [text.strip().split('\t')[1] for text in open(path + 'train.tsv').readlines()]
-    # dev = [text.strip().split('\t')[1] for text in open(path + 'dev.tsv').readlines()]
-    # data = train + test + dev
-    # dictionary = Dictionary()
-    # dictionary.build_dictionary(data)
-    # print(dictionary.vocab_words[:20])
-    # joblib.dump(dictionary, open('dict.pkl', 'wb'))
-    dictionary = joblib.load('dict.pkl')
-    id = dictionary.indexer('世界')
-    print(id)
+    data = pd.read_csv(config.train_path, sep='\t').dropna()
+    test = pd.read_csv(config.test_path, sep='\t')
+    valid = pd.read_csv(config.valid_path, sep='\t')
+    data = pd.concat([train, test, valid], axis=0).dropna()
+    word = True
+    data = multiprocess_data(data,processes_data,worker=10,word=True)
+    if word:
+        data = data["cut_sentence"].values.tolist()
+    else:
+        data = data['raw_words'].values.tolist()
+    dictionary = Dictionary()
+    dictionary.build_dictionary(data)
+    print(dictionary.vocab_words[:20])
+    joblib.dump(dictionary, open('dict.pkl', 'wb'))
+    # dictionary = joblib.load('dict.pkl')
+    # id = dictionary.indexer('世界')
+    # print(id)
