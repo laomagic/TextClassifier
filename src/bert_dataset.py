@@ -1,7 +1,7 @@
 from torch.utils.data import Dataset
 import pandas as pd
 from src.utils import config
-from src.utils.tools import clean_symbols, query_cut
+from src.utils.tools import clean_symbols, query_cut, processes_data, multiprocess_data
 from tqdm import tqdm
 import torch
 
@@ -17,16 +17,17 @@ class BertDataset(Dataset):
         self.data = pd.read_csv(path, sep='\t').dropna()
         if debug:
             self.data = self.data.sample(n=1000, replace=True)
-        # self.data["sentence"] = self.data['title']
-        # self.data["sentence"] = self.data['title'] + self.data['content']
-        self.data["sentence"] = self.data['content']
-        self.data['clean_sentence'] = self.data['sentence'].progress_apply(clean_symbols)
-        self.data["cut_sentence"] = self.data['clean_sentence']
-        # 标签映射到id
-        self.data['category_id'] = self.data['label'].progress_apply(lambda x: x.strip()).map(config.label2id)
-        # char粒度
-        if self.word:
-            self.data["cut_sentence"] = self.data['clean_sentence'].progress_apply(query_cut)
+        self.data = multiprocess_data(self.data, processes_data, worker=10, word=word)  # 处理数据
+        # # self.data["sentence"] = self.data['title']
+        # # self.data["sentence"] = self.data['title'] + self.data['content']
+        # self.data["sentence"] = self.data['content']
+        # self.data['clean_sentence'] = self.data['sentence'].progress_apply(clean_symbols)
+        # self.data["cut_sentence"] = self.data['clean_sentence']
+        # # 标签映射到id
+        # self.data['category_id'] = self.data['label'].progress_apply(lambda x: x.strip()).map(config.label2id)
+        # # char粒度
+        # if self.word:
+        #     self.data["cut_sentence"] = self.data['clean_sentence'].progress_apply(query_cut)
         self.tokenizer = tokenizer
         self.max_length = max_length
 
