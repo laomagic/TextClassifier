@@ -108,13 +108,18 @@ def clean_symbols(text):
     return re.sub("\s+", " ", text)
 
 
-def build_dict_dataset(data):
-    data["sentence"] = data['title'] + data['content']
+def processes_data(data,word):
+    """预处理数据"""
+    # self.data["sentence"] = self.data['title']
+    self.data["sentence"] = self.data['title'] + self.data['content']
     # data["sentence"] = data['content']
-    # 去除标点符号
     data['clean_sentence'] = data['sentence'].progress_apply(clean_symbols)
-    data["cut_sentence"] = data['clean_sentence'].progress_apply(query_cut)
-    data['raw_words'] = data["cut_sentence"].progress_apply(lambda x: ' '.join(x))
+    data["cut_sentence"] = data['clean_sentence']
+    # 标签映射到id
+    data['category_id'] = data['label'].progress_apply(lambda x: x.strip()).map(config.label2id)
+    # char粒度
+    if word:
+        data["cut_sentence"] = data['clean_sentence'].progress_apply(query_cut)
     return data
 
 
