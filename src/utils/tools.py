@@ -108,13 +108,9 @@ def clean_symbols(text):
     return re.sub("\s+", " ", text)
 
 
-def build_dict_dataset():
-    data = pd.read_csv(config.train_path, sep='\t').dropna()
-    # test = pd.read_csv(config.test_path, sep='\t')
-    # valid = pd.read_csv(config.valid_path, sep='\t')
-    # data = pd.concat([train, test, valid], axis=0).dropna()
-    # data["sentence"] = data['title'] + data['content']
-    data["sentence"] = data['content']
+def build_dict_dataset(data):
+    data["sentence"] = data['title'] + data['content']
+    # data["sentence"] = data['content']
     # 去除标点符号
     data['clean_sentence'] = data['sentence'].progress_apply(clean_symbols)
     data["cut_sentence"] = data['clean_sentence'].progress_apply(query_cut)
